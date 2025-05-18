@@ -1,0 +1,56 @@
+{% extends 'navigation2.html' %}
+{% load static %}
+{% block b %}
+<style>
+    input[type="text"], input[type="password"] {
+        border-radius: 8px;
+        width: 600px;
+        height: 35px; /* Set a consistent height */
+    }
+</style>
+
+<div style="color: Black; border: 1px solid white; border-radius: 8px; background-color: white; padding: 50px">
+    {% if error %}
+        <h3><strong>All Available Trains</strong></h3><hr>
+        <table width="800">
+            {% for i in route1 %}
+                <tr style="margin-top: 10px">
+                    <td><hr><img src="{{ i.train.img.url }}" style="width: 150px; height: 135px;"></td>
+                    <td><b><br>Train Name: {{ i.train.trainname }}</b><br>
+                        Train Number: {{ i.train.train_no }}<br>
+                        From City: {{ i.train.from_city }}<br>
+                        Fare: {{ i.fare }}<br></td>
+                    <td><br><br>
+                        <button style="background-color: #333; border: 1px solid black; border-radius: 8px; padding: 10px">
+                            <a href="{% url 'book_detail' coun i.train.id route %}" style="padding: 30px; color: white;">Book Now</a>
+                        </button><br><br>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table><br>
+    {% else %}
+        <h3><strong>Search Train</strong></h3><hr>
+        <form method="post" action="{% url 'search_train' %}">
+            {% csrf_token %}
+            From City:<br>
+            <select name="fcity" style="border-radius: 8px; width: 600px; height: 35px;">
+                {% for i in data2 %}
+                    <option>{{ i.route }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            To City:<br>
+            <select name="tcity" style="border-radius: 8px; width: 600px; height: 35px;">
+                {% for i in data2 %}
+                    <option>{{ i.route }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            Travel Date:<br>
+            <input type="date" name="date" style="border-radius: 8px; width: 600px; height: 35px;"><br><br>
+            <input type="submit" value="Search" style="color: white; border-radius: 8px; width: 115px; height: 35px; background-color: #333; border: 1px solid black">
+        </form>
+    {% endif %}
+</div>
+
+{% endblock %}
